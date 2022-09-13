@@ -1,0 +1,10 @@
+import pyvisa as visa
+
+rm = visa.ResourceManager()
+rm.list_resources()
+my_instrument = rm.open_resource('USB0::0x2A8D::0x0201::MY57701718::INSTR')
+
+my_instrument.query('*IDN?') # Identify device
+my_instrument.write('*RST') # Reset configuration 
+my_instrument.write('CONF:CURR:DC 0.1 A, MAX') # Set current limit
+my_instrument.write('CONF:VOLT:DC 1 V, MAX') # Set voltage limit
