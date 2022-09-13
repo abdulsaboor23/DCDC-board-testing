@@ -1,0 +1,18 @@
+import pyvisa as visa
+
+rm = visa.ResourceManager()
+rm.list_resources()
+my_instrument = rm.open_resource('ASRL3::INSTR')
+
+my_instrument.query('*IDN?')
+my_instrument.write('*RST') # my_instrument.query('*RST') gives an error....why?
+
+my_instrument.write('SYST:REM')
+my_instrument.write('APPL CH1, 12V, 0.1A')
+my_instrument.write('OUTP ON')
+
+voltCH1 = float(my_instrument.query('MEAS:VOLT? CH1'))
+currCH1 = float(my_instrument.query('MEAS:CURR? CH1'))
+pwrCH1 = voltCH1 * currCH1
+
+my_instrument.write('OUTP OFF')
